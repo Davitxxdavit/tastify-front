@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { CartDrawer } from './components/CartDrawer';
+import { ChatWidget } from './components/ChatWidget';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             </Route>
           </Routes>
           <CartDrawer />
+          <ChatWidget />
         </BrowserRouter>
       </CartProvider>
     </AuthProvider>
@@ -37,3 +39,4 @@ function App() {
 }
 
 export default App;
+
