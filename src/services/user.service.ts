@@ -21,12 +21,13 @@ export interface UserProfile {
 
 export const userService = {
     async getProfile() {
-        const response = await api.get<UserProfile>('/users/me');
+        const response = await api.get<UserProfile>('/users/profile');
         return response.data;
     },
 
     async updateProfile(data: Partial<UserProfile>) {
-        const response = await api.patch<UserProfile>('/users/me', data);
+        // Note: Backend may not support profile updates yet
+        const response = await api.put<UserProfile>('/users/profile', data);
         return response.data;
     },
 

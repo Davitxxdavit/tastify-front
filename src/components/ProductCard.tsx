@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Plus } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 import { Button } from './ui/Button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/Card';
 import type { Product } from '../services/products.service';
@@ -12,42 +12,63 @@ interface ProductCardProps {
 export function ProductCard({ product, onAddToCart }: ProductCardProps) {
     return (
         <motion.div
-            whileHover={{ y: -5 }}
-            transition={{ duration: 0.2 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
         >
             <Card className="overflow-hidden h-full flex flex-col group">
-                <div className="relative aspect-video overflow-hidden bg-muted">
-                    {/* Placeholder for real image since backend might not send one yet */}
+                {/* Image Container with Gradient Overlay */}
+                <div className="relative aspect-[4/3] overflow-hidden bg-gradient-to-br from-muted to-muted/50">
                     <img
                         src={product.imageUrl || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YnVyZ2VyfGVufDB8fDB8fHww'}
                         alt={product.name}
-                        className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105"
+                        className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                     />
-                    <div className="absolute top-2 right-2 rounded-full bg-background/80 px-2 py-1 text-xs font-bold backdrop-blur">
+                    {/* Gradient overlay for depth */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    {/* Premium Price Badge */}
+                    <div className="absolute top-3 right-3 rounded-full bg-primary px-3 py-1.5 text-sm font-bold text-primary-foreground shadow-lg">
                         ${Number(product.price).toFixed(2)}
                     </div>
+
+                    {/* Availability Badge */}
+                    {!product.isAvailable && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                            <span className="bg-destructive text-destructive-foreground px-4 py-2 rounded-full font-semibold text-sm">
+                                Sold Out
+                            </span>
+                        </div>
+                    )}
                 </div>
-                <CardHeader className="p-4">
-                    <CardTitle className="text-xl line-clamp-1">{product.name}</CardTitle>
-                    <CardDescription className="line-clamp-2 text-sm mt-1 h-10">
+
+                {/* Content */}
+                <CardHeader className="p-5 pb-2">
+                    <CardTitle className="text-lg font-bold line-clamp-1 tracking-tight">
+                        {product.name}
+                    </CardTitle>
+                    <CardDescription className="line-clamp-2 text-sm mt-1.5 leading-relaxed">
                         {product.description}
                     </CardDescription>
                 </CardHeader>
-                <CardContent className="p-4 pt-0 flex-grow">
-                    {/* Tags or extra info could go here */}
+
+                <CardContent className="p-5 pt-0 flex-grow">
+                    {/* Could add tags, ratings, or cooking time here */}
                 </CardContent>
-                <CardFooter className="p-4 pt-0">
+
+                <CardFooter className="p-5 pt-0">
                     <Button
-                        className="w-full gap-2"
+                        className="w-full gap-2 h-11 text-sm font-semibold shadow-sm hover:shadow-md transition-shadow"
                         onClick={() => onAddToCart && onAddToCart(product)}
                         disabled={!product.isAvailable}
                     >
                         {product.isAvailable ? (
                             <>
-                                <Plus className="h-4 w-4" /> Add to Cart
+                                <ShoppingBag className="h-4 w-4" />
+                                Add to Cart
                             </>
                         ) : (
-                            'Sold Out'
+                            'Out of Stock'
                         )}
                     </Button>
                 </CardFooter>
