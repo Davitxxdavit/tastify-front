@@ -1,5 +1,6 @@
 import { Button } from "../components/ui/Button";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 export default function Home() {
     return (
@@ -29,8 +30,12 @@ export default function Home() {
                         transition={{ duration: 0.5, delay: 0.4 }}
                         className="mt-8 flex gap-4"
                     >
-                        <Button size="lg" className="rounded-full text-lg">Order Now</Button>
-                        <Button size="lg" variant="outline" className="rounded-full text-lg">View Menu</Button>
+                        <Link to="/menu">
+                            <Button size="lg" className="rounded-full text-lg">Order Now</Button>
+                        </Link>
+                        <Link to="/menu">
+                            <Button size="lg" variant="outline" className="rounded-full text-lg">View Menu</Button>
+                        </Link>
                     </motion.div>
                 </div>
             </div>

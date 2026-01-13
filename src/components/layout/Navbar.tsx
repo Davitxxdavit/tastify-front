@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ShoppingBag, User } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useCart } from '../../context/CartContext';
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+    const { totalItems, openCart } = useCart();
+    const navigate = useNavigate();
 
     return (
         <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -25,17 +28,22 @@ export function Navbar() {
                         <Link to="/menu" className="text-md font-medium text-muted-foreground transition-colors hover:text-primary">
                             Menu
                         </Link>
+                        <Link to="/orders" className="text-md font-medium text-muted-foreground transition-colors hover:text-primary">
+                            Orders
+                        </Link>
                     </div>
 
                     <div className="hidden md:flex items-center space-x-4">
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" onClick={() => navigate('/profile')}>
                             <User className="h-5 w-5" />
                         </Button>
-                        <Button variant="default" size="icon" className="relative">
+                        <Button variant="default" size="icon" className="relative" onClick={openCart}>
                             <ShoppingBag className="h-5 w-5" />
-                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
-                                0
-                            </span>
+                            {totalItems > 0 && (
+                                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
+                                    {totalItems}
+                                </span>
+                            )}
                         </Button>
                     </div>
 
@@ -64,13 +72,16 @@ export function Navbar() {
                             <Link to="/menu" className="text-sm font-medium hover:text-primary" onClick={() => setIsOpen(false)}>
                                 Menu
                             </Link>
+                            <Link to="/orders" className="text-sm font-medium hover:text-primary" onClick={() => setIsOpen(false)}>
+                                Orders
+                            </Link>
                             <div className="flex items-center justify-between pt-4 border-t">
-                                <Button variant="ghost" size="sm" className="w-full justify-start">
+                                <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => { setIsOpen(false); navigate('/profile'); }}>
                                     <User className="mr-2 h-4 w-4" />
-                                    Account
+                                    Profile
                                 </Button>
-                                <Button variant="default" size="sm">
-                                    Cart (0)
+                                <Button variant="default" size="sm" onClick={() => { setIsOpen(false); openCart(); }}>
+                                    Cart ({totalItems})
                                 </Button>
                             </div>
                         </div>

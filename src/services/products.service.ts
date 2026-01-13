@@ -12,10 +12,12 @@ export interface Product {
 
 export const productService = {
     async getAll() {
-        // Backend endpoint assumed to be /products or /items
-        const response = await api.get<Product[]>('/products');
-        // Need to verify backend endpoint for products. 
-        // Based on "Burger API", usually /products or /burgers
+        const response = await api.get<Product[]>('/menu/items');
+        return response.data;
+    },
+
+    async getByCategory(categoryId: string) {
+        const response = await api.get<Product[]>(`/menu/items?categoryId=${categoryId}`);
         return response.data;
     }
 };
