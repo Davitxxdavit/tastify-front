@@ -35,7 +35,7 @@ export function Navbar() {
                                 <Sparkles className="h-5 w-5 text-white" />
                             </motion.div>
                             <span className="text-xl font-bold text-primary-foreground tracking-tight">
-                                Tastify
+                                Kitchen Gallery
                             </span>
                         </Link>
 
@@ -46,8 +46,8 @@ export function Navbar() {
                                     key={link.path}
                                     to={link.path}
                                     className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-lg ${isActive(link.path)
-                                            ? 'text-primary-foreground'
-                                            : 'text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10'
+                                        ? 'text-primary-foreground'
+                                        : 'text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10'
                                         }`}
                                 >
                                     {link.label}
@@ -134,8 +134,8 @@ export function Navbar() {
                                     key={link.path}
                                     to={link.path}
                                     className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive(link.path)
-                                            ? 'bg-white/15 text-primary-foreground'
-                                            : 'text-primary-foreground/70 hover:bg-white/10 hover:text-primary-foreground'
+                                        ? 'bg-white/15 text-primary-foreground'
+                                        : 'text-primary-foreground/70 hover:bg-white/10 hover:text-primary-foreground'
                                         }`}
                                     onClick={() => setIsOpen(false)}
                                 >

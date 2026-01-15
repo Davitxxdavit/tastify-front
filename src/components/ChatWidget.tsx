@@ -16,7 +16,7 @@ export function ChatWidget() {
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
-            text: "👋 Hi there! Welcome to Tastify support. How can we help you today?",
+            text: "👋 Hi there! Welcome to Kitchen Gallery support. How can we help you today?",
             isUser: false,
             timestamp: new Date(),
         }
@@ -127,7 +127,7 @@ export function ChatWidget() {
                                 <Headphones className="h-5 w-5" />
                             </div>
                             <div className="flex-1">
-                                <h3 className="font-semibold">Tastify Support</h3>
+                                <h3 className="font-semibold">Kitchen Gallery Support</h3>
                                 <p className="text-xs opacity-80 flex items-center gap-1">
                                     <span className="w-2 h-2 bg-green-400 rounded-full" />
                                     Online now

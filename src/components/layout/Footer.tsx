@@ -4,7 +4,7 @@ export function Footer() {
             <div className="container mx-auto py-8 px-4 md:px-6">
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
                     <div>
-                        <h3 className="text-lg font-semibold text-primary">Tastify</h3>
+                        <h3 className="text-lg font-semibold text-primary">Kitchen Gallery</h3>
                         <p className="mt-2 text-sm text-muted-foreground">
                             Delicious burgers delivered to your desk.
                         </p>
@@ -26,7 +26,7 @@ export function Footer() {
                     </div>
                 </div>
                 <div className="mt-8 border-t pt-8 text-center text-sm text-muted-foreground">
-                    &copy; {new Date().getFullYear()} Tastify. All rights reserved.
+                    &copy; {new Date().getFullYear()} Kitchen Gallery. All rights reserved.
                 </div>
             </div>
         </footer>

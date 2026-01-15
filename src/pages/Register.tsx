@@ -47,7 +47,7 @@ export default function Register() {
                 <Card>
                     <CardHeader>
                         <CardTitle>Create Account</CardTitle>
-                        <CardDescription>Join Tastify to order delicious burgers.</CardDescription>
+                        <CardDescription>Join Kitchen Gallery to order delicious burgers.</CardDescription>
                     </CardHeader>
                     <form onSubmit={handleSubmit}>
                         <CardContent className="space-y-4">
