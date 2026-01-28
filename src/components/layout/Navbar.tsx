@@ -1,156 +1,110 @@
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Menu, X, ShoppingBag, User, Sparkles } from 'lucide-react';
-import { Button } from '../ui/Button';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { totalItems, openCart } = useCart();
-    const navigate = useNavigate();
-    const location = useLocation();
 
-    const isActive = (path: string) => location.pathname === path;
-
+    // Kitchen Gallery Nav Items
     const navLinks = [
-        { path: '/', label: 'Home' },
         { path: '/menu', label: 'Menu' },
-        { path: '/orders', label: 'Orders' },
+        { path: '/about', label: 'About Us' },
+        { path: '/faq', label: 'Delivery Zone' },
+        { path: '/contact', label: 'Reservations' },
     ];
 
     return (
-        <nav className="sticky top-0 z-50 w-full">
-            {/* Glassmorphism black navbar */}
-            <div className="bg-primary/95 backdrop-blur-xl border-b border-white/10 shadow-lg">
-                <div className="container mx-auto px-4 md:px-6">
-                    <div className="flex h-16 items-center justify-between">
-                        {/* Logo */}
-                        <Link to="/" className="flex items-center space-x-2 group">
-                            <motion.div
-                                className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg"
-                                whileHover={{ rotate: 12, scale: 1.05 }}
-                                transition={{ type: "spring", stiffness: 400 }}
-                            >
-                                <Sparkles className="h-5 w-5 text-white" />
-                            </motion.div>
-                            <span className="text-xl font-bold text-primary-foreground tracking-tight">
-                                Kitchen Gallery
-                            </span>
-                        </Link>
-
-                        {/* Desktop Nav */}
-                        <div className="hidden md:flex items-center space-x-1">
-                            {navLinks.map((link) => (
-                                <Link
-                                    key={link.path}
-                                    to={link.path}
-                                    className={`relative px-4 py-2 text-sm font-medium transition-colors rounded-lg ${isActive(link.path)
-                                        ? 'text-primary-foreground'
-                                        : 'text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10'
-                                        }`}
-                                >
-                                    {link.label}
-                                    {isActive(link.path) && (
-                                        <motion.div
-                                            layoutId="navbar-indicator"
-                                            className="absolute inset-0 bg-white/15 rounded-lg -z-10"
-                                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                        />
-                                    )}
-                                </Link>
-                            ))}
-                        </div>
-
-                        {/* Actions */}
-                        <div className="hidden md:flex items-center space-x-2">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => navigate('/profile')}
-                                className="text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10"
-                            >
-                                <User className="h-5 w-5" />
-                            </Button>
-                            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                                <Button
-                                    size="icon"
-                                    className="relative bg-gradient-to-br from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white shadow-lg shadow-orange-500/30"
-                                    onClick={openCart}
-                                >
-                                    <ShoppingBag className="h-5 w-5" />
-                                    {totalItems > 0 && (
-                                        <motion.span
-                                            initial={{ scale: 0 }}
-                                            animate={{ scale: 1 }}
-                                            className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white ring-2 ring-primary"
-                                        >
-                                            {totalItems}
-                                        </motion.span>
-                                    )}
-                                </Button>
-                            </motion.div>
-                        </div>
-
-                        {/* Mobile Menu Button */}
-                        <div className="md:hidden flex items-center space-x-2">
-                            <Button
-                                size="icon"
-                                className="relative bg-gradient-to-br from-amber-400 to-orange-500 text-white"
-                                onClick={openCart}
-                            >
-                                <ShoppingBag className="h-5 w-5" />
-                                {totalItems > 0 && (
-                                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[10px] text-white">
-                                        {totalItems}
-                                    </span>
-                                )}
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => setIsOpen(!isOpen)}
-                                className="text-primary-foreground hover:bg-white/10"
-                            >
-                                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                            </Button>
-                        </div>
+        <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-background-dark/90 border-b border-accent-dark">
+            <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                <Link to="/" className="flex items-center gap-3">
+                    <div className="size-8 text-primary">
+                        <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48" }}>restaurant_menu</span>
                     </div>
+                    <div>
+                        <h1 className="text-white text-xl font-serif-display font-bold tracking-tight">Kitchen Gallery</h1>
+                        <p className="text-gray-400 text-[10px] uppercase tracking-widest font-medium">Batumi</p>
+                    </div>
+                </Link>
+
+                {/* Desktop Nav */}
+                <div className="hidden md:flex items-center gap-8">
+                    {navLinks.map((link, idx) => (
+                        <Link
+                            key={idx}
+                            to={link.path}
+                            className="text-gray-300 hover:text-white text-sm font-medium transition-colors"
+                        >
+                            {link.label}
+                        </Link>
+                    ))}
+                </div>
+
+                <div className="flex items-center gap-4">
+                    {/* Language Switcher - Visual Only for now */}
+                    <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-gray-500">
+                        <button className="text-white hover:text-primary transition-colors">EN</button>
+                        <span className="text-gray-700">|</span>
+                        <button className="hover:text-primary transition-colors">GE</button>
+                        <span className="text-gray-700">|</span>
+                        <button className="hover:text-primary transition-colors">RU</button>
+                    </div>
+                    <div className="h-4 w-px bg-accent-dark hidden sm:block"></div>
+
+                    <button className="text-gray-300 hover:text-white transition-colors relative">
+                        <span className="material-symbols-outlined">search</span>
+                    </button>
+
+                    <button
+                        className="text-gray-300 hover:text-white transition-colors relative"
+                        onClick={openCart}
+                    >
+                        <span className="material-symbols-outlined">shopping_bag</span>
+                        {totalItems > 0 && (
+                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                                {totalItems}
+                            </span>
+                        )}
+                    </button>
+
+                    <Link to="/login" className="hidden md:flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-white hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">
+                        Login
+                    </Link>
+
+                    <button
+                        className="md:hidden text-white"
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        <span className="material-symbols-outlined">menu</span>
+                    </button>
                 </div>
             </div>
 
-            {/* Mobile Nav */}
+            {/* Mobile Menu */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        className="md:hidden absolute w-full bg-primary/98 backdrop-blur-xl border-b border-white/10 shadow-xl"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="md:hidden bg-background-dark border-t border-accent-dark"
                     >
-                        <div className="container py-4 flex flex-col space-y-1 px-4">
-                            {navLinks.map((link) => (
+                        <div className="px-6 py-4 flex flex-col gap-4">
+                            {navLinks.map((link, idx) => (
                                 <Link
-                                    key={link.path}
+                                    key={idx}
                                     to={link.path}
-                                    className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive(link.path)
-                                        ? 'bg-white/15 text-primary-foreground'
-                                        : 'text-primary-foreground/70 hover:bg-white/10 hover:text-primary-foreground'
-                                        }`}
+                                    className="text-gray-300 hover:text-white font-medium"
                                     onClick={() => setIsOpen(false)}
                                 >
                                     {link.label}
                                 </Link>
                             ))}
-                            <div className="pt-3 mt-2 border-t border-white/10">
-                                <Button
-                                    variant="ghost"
-                                    className="w-full justify-start text-primary-foreground/80 hover:text-primary-foreground hover:bg-white/10"
-                                    onClick={() => { setIsOpen(false); navigate('/profile'); }}
-                                >
-                                    <User className="mr-2 h-4 w-4" />
-                                    Profile
-                                </Button>
+                            <div className="flex gap-4 pt-4 border-t border-accent-dark">
+                                <Link to="/login" className="flex-1 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm">
+                                    Login
+                                </Link>
                             </div>
                         </div>
                     </motion.div>
