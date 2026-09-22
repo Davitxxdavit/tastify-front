@@ -78,6 +78,13 @@
 }
 
 @layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .animate-fade-in-up {
     animation: fadeInUp 0.5s ease-out forwards;
   }
