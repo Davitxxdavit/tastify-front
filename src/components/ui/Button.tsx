@@ -32,14 +32,10 @@ const buttonVariants = cva(
     }
 )
 
-export interface ButtonProps
-    extends Omit<HTMLMotionProps<"button">, "ref">,
-    VariantProps<typeof buttonVariants> {
-    asChild?: boolean
-}
+export type ButtonProps = Omit<HTMLMotionProps<"button">, "ref"> & VariantProps<typeof buttonVariants>
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ className, variant, size, asChild = false, ...props }, ref) => {
+    ({ className, variant, size, ...props }, ref) => {
         // We are using framer-motion button for subtle click effects
         return (
             <motion.button
@@ -53,4 +49,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = "Button"
 
-export { Button, buttonVariants }
+export { Button }

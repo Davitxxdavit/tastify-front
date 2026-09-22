@@ -10,8 +10,9 @@ import FAQ from './pages/FAQ';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
 import Profile from './pages/Profile';
-import { AuthProvider } from './context/AuthContext';
-import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './features/auth/AuthProvider';
+import { RequireAuth } from './features/auth/RequireAuth';
+import { CartProvider } from './features/cart/CartProvider';
 import { CartDrawer } from './components/CartDrawer';
 import { ChatWidget } from './components/ChatWidget';
 
@@ -27,9 +28,9 @@ function App() {
               <Route path="about" element={<About />} />
               <Route path="contact" element={<Contact />} />
               <Route path="faq" element={<FAQ />} />
-              <Route path="checkout" element={<Checkout />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="profile" element={<Profile />} />
+              <Route path="checkout" element={<RequireAuth><Checkout /></RequireAuth>} />
+              <Route path="orders" element={<RequireAuth><Orders /></RequireAuth>} />
+              <Route path="profile" element={<RequireAuth><Profile /></RequireAuth>} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
               {/* 404 Route */}
@@ -45,4 +46,3 @@ function App() {
 }
 
 export default App;
-

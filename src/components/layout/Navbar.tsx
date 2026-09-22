@@ -1,11 +1,20 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useCart } from '../../context/CartContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCart } from '../../features/cart/useCart';
+import { useAuth } from '../../features/auth/useAuth';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const { totalItems, openCart } = useCart();
+    const { isAuthenticated, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        setIsOpen(false);
+        navigate('/');
+    };
 
     // Kitchen Gallery Nav Items
     const navLinks = [
@@ -68,9 +77,19 @@ export function Navbar() {
                         )}
                     </button>
 
-                    <Link to="/login" className="hidden md:flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-white hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">
-                        Login
-                    </Link>
+                    {isAuthenticated ? (
+                        <div className="hidden md:flex items-center gap-5">
+                            <Link to="/orders" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">My Orders</Link>
+                            <Link to="/profile" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Profile</Link>
+                            <button type="button" onClick={handleLogout} className="text-gray-400 hover:text-white text-sm font-medium transition-colors">
+                                Log out
+                            </button>
+                        </div>
+                    ) : (
+                        <Link to="/login" className="hidden md:flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-white hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">
+                            Login
+                        </Link>
+                    )}
 
                     <button
                         className="md:hidden text-white"
@@ -102,9 +121,23 @@ export function Navbar() {
                                 </Link>
                             ))}
                             <div className="flex gap-4 pt-4 border-t border-accent-dark">
-                                <Link to="/login" className="flex-1 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm">
-                                    Login
-                                </Link>
+                                {isAuthenticated ? (
+                                    <>
+                                        <Link to="/orders" onClick={() => setIsOpen(false)} className="flex-1 h-10 flex items-center justify-center rounded-lg border border-accent-dark text-white font-bold text-sm">
+                                            My Orders
+                                        </Link>
+                                        <Link to="/profile" onClick={() => setIsOpen(false)} className="flex-1 h-10 flex items-center justify-center rounded-lg border border-accent-dark text-white font-bold text-sm">
+                                            Profile
+                                        </Link>
+                                        <button type="button" onClick={handleLogout} className="flex-1 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm">
+                                            Log out
+                                        </button>
+                                    </>
+                                ) : (
+                                    <Link to="/login" onClick={() => setIsOpen(false)} className="flex-1 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold text-sm">
+                                        Login
+                                    </Link>
+                                )}
                             </div>
                         </div>
                     </motion.div>

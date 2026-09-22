@@ -1,71 +1,12 @@
-import { useEffect, useState } from 'react';
-import { userService, type UserProfile } from '../services/user.service';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
-import { toast } from 'react-hot-toast';
-import { Loader2, User as UserIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { MapPin, User as UserIcon } from 'lucide-react';
+import { useProfile } from '../features/account/hooks';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/Card';
+import { ErrorState } from '../components/ui/ErrorState';
+import { Skeleton } from '../components/ui/Skeleton';
 
 export default function Profile() {
-    const [profile, setProfile] = useState<UserProfile | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [editing, setEditing] = useState(false);
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        phone: '',
-    });
-
-    useEffect(() => {
-        fetchProfile();
-    }, []);
-
-    const fetchProfile = async () => {
-        try {
-            const data = await userService.getProfile();
-            setProfile(data);
-            setFormData({
-                firstName: data.firstName,
-                lastName: data.lastName,
-                phone: data.phone || '',
-            });
-        } catch (error) {
-            console.error('Failed to fetch profile', error);
-            toast.error('Could not load profile');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const updated = await userService.updateProfile(formData);
-            setProfile(updated);
-            setEditing(false);
-            toast.success('Profile updated successfully');
-        } catch (error) {
-            console.error('Failed to update profile', error);
-            toast.error('Failed to update profile');
-        }
-    };
-
-    if (loading) {
-        return (
-            <div className="flex min-h-[50vh] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-        );
-    }
-
-    if (!profile) {
-        return (
-            <div className="flex min-h-[50vh] items-center justify-center">
-                <p className="text-muted-foreground">Could not load profile</p>
-            </div>
-        );
-    }
+    const { data: profile, isPending, isError, error, refetch, isRefetching } = useProfile();
 
     return (
         <div className="container mx-auto px-4 py-8 max-w-2xl">
@@ -75,80 +16,76 @@ export default function Profile() {
                 className="mb-8"
             >
                 <h1 className="text-3xl font-bold">My Profile</h1>
-                <p className="text-muted-foreground">Manage your account information</p>
+                <p className="text-muted-foreground">Your account and saved delivery addresses</p>
             </motion.div>
 
-            <Card>
-                <CardHeader>
-                    <div className="flex items-center gap-4">
-                        <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                            <UserIcon className="h-8 w-8 text-primary" />
+            {isPending ? (
+                <Skeleton className="h-72 w-full rounded-lg" />
+            ) : isError ? (
+                <ErrorState title="Couldn't load your profile" error={error} onRetry={() => refetch()} isRetrying={isRefetching} />
+            ) : (
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center gap-4">
+                            <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+                                <UserIcon className="h-8 w-8 text-primary-bright" aria-hidden />
+                            </div>
+                            <div>
+                                <CardTitle>{profile.name}</CardTitle>
+                                <CardDescription>{profile.email}</CardDescription>
+                            </div>
                         </div>
-                        <div>
-                            <CardTitle>{profile.firstName} {profile.lastName}</CardTitle>
-                            <CardDescription>{profile.email}</CardDescription>
-                        </div>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    {editing ? (
-                        <form onSubmit={handleSubmit} className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium">First Name</label>
-                                    <Input
-                                        value={formData.firstName}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, firstName: e.target.value }))}
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium">Last Name</label>
-                                    <Input
-                                        value={formData.lastName}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Phone</label>
-                                <Input
-                                    type="tel"
-                                    value={formData.phone}
-                                    onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                                />
-                            </div>
-                            <div className="flex gap-2">
-                                <Button type="submit">Save Changes</Button>
-                                <Button type="button" variant="outline" onClick={() => setEditing(false)}>
-                                    Cancel
-                                </Button>
-                            </div>
-                        </form>
-                    ) : (
-                        <div className="space-y-4">
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
-                                <p className="text-sm text-muted-foreground">Name</p>
-                                <p className="font-medium">{profile.firstName} {profile.lastName}</p>
+                                <dt className="text-sm text-muted-foreground">Name</dt>
+                                <dd className="font-medium">{profile.name}</dd>
                             </div>
                             <div>
-                                <p className="text-sm text-muted-foreground">Email</p>
-                                <p className="font-medium">{profile.email}</p>
+                                <dt className="text-sm text-muted-foreground">Email</dt>
+                                <dd className="font-medium">{profile.email}</dd>
                             </div>
                             <div>
-                                <p className="text-sm text-muted-foreground">Phone</p>
-                                <p className="font-medium">{profile.phone || 'Not set'}</p>
+                                <dt className="text-sm text-muted-foreground">Phone</dt>
+                                <dd className="font-medium">{profile.phone || 'Not set'}</dd>
                             </div>
                             <div>
-                                <p className="text-sm text-muted-foreground">Role</p>
-                                <p className="font-medium capitalize">{profile.role.toLowerCase()}</p>
+                                <dt className="text-sm text-muted-foreground">Member since</dt>
+                                <dd className="font-medium">{new Date(profile.createdAt).toLocaleDateString()}</dd>
                             </div>
-                            <Button onClick={() => setEditing(true)}>Edit Profile</Button>
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
+                        </dl>
+
+                        <section aria-labelledby="addresses-heading">
+                            <h2 id="addresses-heading" className="text-sm font-semibold uppercase tracking-wide text-muted-foreground mb-3">
+                                Saved addresses
+                            </h2>
+                            {profile.addresses.length === 0 ? (
+                                <p className="text-sm text-muted-foreground">
+                                    No saved addresses yet. Addresses you use at checkout are saved here.
+                                </p>
+                            ) : (
+                                <ul className="space-y-2">
+                                    {profile.addresses.map((address) => (
+                                        <li key={address.id} className="flex items-start gap-3 rounded border border-surface-border p-3">
+                                            <MapPin className="h-4 w-4 mt-0.5 text-primary-bright" aria-hidden />
+                                            <div className="text-sm">
+                                                <p className="font-medium">{address.street}</p>
+                                                <p className="text-muted-foreground">
+                                                    {address.city}, {address.country}
+                                                </p>
+                                            </div>
+                                            {address.isDefault && (
+                                                <span className="ml-auto text-[10px] uppercase tracking-wider text-primary-bright">Default</span>
+                                            )}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </section>
+                    </CardContent>
+                </Card>
+            )}
         </div>
     );
 }

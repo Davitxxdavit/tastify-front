@@ -1,11 +1,13 @@
 import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../features/cart/useCart';
+import { lineTotal, lineUnitTotal } from '../features/cart/cart-logic';
+import { formatGel } from '../lib/format';
 import { Button } from './ui/Button';
 import { useNavigate } from 'react-router-dom';
 
 export function CartDrawer() {
-    const { items, removeItem, updateQuantity, totalItems, totalPrice, isOpen, closeCart } = useCart();
+    const { lines: items, removeLine, updateQuantity, totalItems, totalPrice, isOpen, closeCart } = useCart();
     const navigate = useNavigate();
 
     const handleCheckout = () => {
@@ -58,7 +60,7 @@ export function CartDrawer() {
                                 <div className="space-y-4">
                                     {items.map((item) => (
                                         <motion.div
-                                            key={item.id}
+                                            key={item.key}
                                             layout
                                             initial={{ opacity: 0, y: 20 }}
                                             animate={{ opacity: 1, y: 0 }}
@@ -66,13 +68,18 @@ export function CartDrawer() {
                                             className="flex gap-4 p-4 rounded-lg border bg-card"
                                         >
                                             <img
-                                                src={item.imageUrl || 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=200'}
-                                                alt={item.name}
-                                                className="w-20 h-20 object-cover rounded-md"
+                                                src={item.imageUrl ?? undefined}
+                                                alt=""
+                                                className="w-20 h-20 object-cover rounded-md bg-surface-dark"
                                             />
                                             <div className="flex-1">
                                                 <h3 className="font-medium line-clamp-1">{item.name}</h3>
-                                                <p className="text-sm text-muted-foreground">${item.price.toFixed(2)}</p>
+                                                {item.modifiers.length > 0 && (
+                                                    <p className="text-xs text-muted-foreground line-clamp-2">
+                                                        {item.modifiers.map((m) => m.name).join(', ')}
+                                                    </p>
+                                                )}
+                                                <p className="text-sm text-muted-foreground">{formatGel(lineUnitTotal(item))}</p>
 
                                                 {/* Quantity Controls */}
                                                 <div className="flex items-center gap-2 mt-2">
@@ -80,7 +87,7 @@ export function CartDrawer() {
                                                         variant="outline"
                                                         size="icon"
                                                         className="h-8 w-8"
-                                                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                        onClick={() => updateQuantity(item.key, item.quantity - 1)}
                                                     >
                                                         <Minus className="h-3 w-3" />
                                                     </Button>
@@ -89,7 +96,7 @@ export function CartDrawer() {
                                                         variant="outline"
                                                         size="icon"
                                                         className="h-8 w-8"
-                                                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                        onClick={() => updateQuantity(item.key, item.quantity + 1)}
                                                     >
                                                         <Plus className="h-3 w-3" />
                                                     </Button>
@@ -97,14 +104,14 @@ export function CartDrawer() {
                                                         variant="ghost"
                                                         size="icon"
                                                         className="h-8 w-8 ml-auto text-destructive"
-                                                        onClick={() => removeItem(item.id)}
+                                                        onClick={() => removeLine(item.key)}
                                                     >
                                                         <Trash2 className="h-4 w-4" />
                                                     </Button>
                                                 </div>
                                             </div>
                                             <div className="text-right">
-                                                <p className="font-semibold">${(item.price * item.quantity).toFixed(2)}</p>
+                                                <p className="font-semibold">{formatGel(lineTotal(item))}</p>
                                             </div>
                                         </motion.div>
                                     ))}
@@ -117,7 +124,7 @@ export function CartDrawer() {
                             <div className="border-t p-6 space-y-4">
                                 <div className="flex items-center justify-between text-lg font-semibold">
                                     <span>Total</span>
-                                    <span className="text-primary">${totalPrice.toFixed(2)}</span>
+                                    <span className="text-primary">{formatGel(totalPrice)}</span>
                                 </div>
                                 <Button className="w-full" size="lg" onClick={handleCheckout}>
                                     Proceed to Checkout

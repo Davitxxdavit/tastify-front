@@ -1,9 +1,9 @@
 
-import { useCart } from "../context/CartContext";
+import { useCart } from "../features/cart/useCart";
 import { Link } from "react-router-dom";
 
 export default function Checkout() {
-    const { items: cart, totalPrice, removeItem } = useCart();
+    const { lines: cart, totalPrice, removeLine } = useCart();
 
     return (
         <div className="bg-background-dark text-white font-display antialiased min-h-screen flex flex-col selection:bg-primary selection:text-white">
@@ -100,20 +100,20 @@ export default function Checkout() {
                                             <li className="py-6 text-text-muted text-sm text-center">Your cart is empty. <Link to="/menu" className="text-primary underline">Go to Menu</Link></li>
                                         ) : (
                                             cart.map((item) => (
-                                                <li key={item.id} className="flex py-6">
+                                                <li key={item.key} className="flex py-6">
                                                     <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded border border-surface-border bg-zinc-900">
-                                                        <img alt={item.name} className="h-full w-full object-cover object-center opacity-80" src={item.imageUrl} />
+                                                        <img alt={item.name} className="h-full w-full object-cover object-center opacity-80" src={item.imageUrl ?? undefined} />
                                                     </div>
                                                     <div className="ml-4 flex flex-1 flex-col">
                                                         <div>
                                                             <div className="flex justify-between text-sm font-medium text-white">
                                                                 <h3><a className="hover:text-gray-300 transition-colors" href="#">{item.name}</a></h3>
-                                                                <p className="ml-4 tabular-nums">{item.price} ₾</p>
+                                                                <p className="ml-4 tabular-nums">{item.unitPrice} ₾</p>
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-1 items-end justify-between text-xs">
                                                             <p className="text-text-muted">Qty {item.quantity}</p>
-                                                            <button type="button" onClick={() => removeItem(item.id)} className="font-medium text-text-muted hover:text-white transition-colors">Remove</button>
+                                                            <button type="button" onClick={() => removeLine(item.key)} className="font-medium text-text-muted hover:text-white transition-colors">Remove</button>
                                                         </div>
                                                     </div>
                                                 </li>

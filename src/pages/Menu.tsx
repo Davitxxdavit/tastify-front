@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCart } from "../context/CartContext";
+import { useCart } from "../features/cart/useCart";
 import { clsx } from "clsx";
 
 // Dummy data based on HTML
@@ -142,7 +142,7 @@ const menuItems = {
 };
 
 export default function Menu() {
-    const { addItem, totalItems, totalPrice, openCart } = useCart();
+    const { addLine, totalItems, totalPrice, openCart } = useCart();
     const [activeCategory, setActiveCategory] = useState("appetizers");
 
     const scrollToSection = (id: string) => {
@@ -253,13 +253,12 @@ export default function Menu() {
                                                 </div>
                                                 <div className="flex items-center justify-end pt-2">
                                                     <button
-                                                        onClick={() => addItem({
-                                                            id: item.id,
+                                                        onClick={() => addLine({
+                                                            itemId: Number(item.id),
                                                             name: item.name,
-                                                            price: item.price,
-                                                            description: item.description,
+                                                            unitPrice: item.price,
                                                             imageUrl: item.imageUrl,
-                                                            isAvailable: true,
+                                                            modifiers: [],
                                                         })}
                                                         className="flex items-center gap-2 px-4 py-2 rounded border border-primary/30 bg-primary/10 hover:bg-primary hover:border-primary hover:text-black text-primary text-xs uppercase tracking-wider font-bold transition-all duration-300 group/btn"
                                                     >
