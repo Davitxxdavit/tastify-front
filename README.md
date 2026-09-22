@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# Kitchen Gallery — Georgian Restaurant Ordering App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Front end for a Georgian food delivery service in Batumi: browse the menu, fill a cart, and manage your account and orders. Accounts, profile, and order history come from the [Tastify API](https://github.com/Davitxxdavit/testify-back) (NestJS).
 
-Currently, two official plugins are available:
+![Kitchen Gallery home page](docs/screenshots/home.png)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+| Checkout | Mobile |
+| --- | --- |
+| ![Checkout page with delivery address and payment method](docs/screenshots/checkout.png) | <img src="docs/screenshots/mobile.png" alt="Home page on a phone-sized screen" width="260"> |
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Menu grouped by category, with tabs that jump to each section (menu data is currently built into the app)
+- Cart drawer saved in `localStorage`, so it survives page reloads
+- Checkout page with delivery address, phone number, instructions, and card or cash payment (form layout; not yet sent to the API)
+- Sign up, log in, and profile editing through the API; the JWT is attached to requests automatically
+- Order history page loaded from the API
+- About, Contact, and FAQ pages
+- Support chat widget (interface only)
+- Responsive dark design with Georgian typography and Framer Motion animations
 
-## Expanding the ESLint configuration
+## Built with
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React 19 and TypeScript
+- Vite
+- Tailwind CSS 4
+- React Router 7
+- Axios with request and response interceptors
+- Framer Motion
+- React Hot Toast
+- Lucide icons
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Run locally
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Requires Node.js 20+. The app expects the [Tastify API](https://github.com/Davitxxdavit/testify-back) to be running.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+cp .env.example .env    # set VITE_API_ORIGIN, e.g. http://localhost:3000
+npm run dev             # http://localhost:5173
+npm run build           # type-check and build to dist/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+src/
+├── pages/          Home, Menu, Checkout, Orders, Profile, Login, Register, About, Contact, FAQ
+├── components/     CartDrawer, CategoryFilter, ProductCard, OrderCard, ChatWidget
+│   ├── layout/     Navbar, Footer, Layout
+│   └── ui/         Button, Card, Input, Badge
+├── context/        AuthContext, CartContext
+└── services/       Axios client and API services (auth, products, categories, orders, user)
 ```
