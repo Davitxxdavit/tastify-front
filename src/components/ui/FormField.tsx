@@ -19,7 +19,8 @@ interface FormFieldProps {
 
 /** Label + control + hint/error, wired together for screen readers. */
 export function FormField({ id, label, error, hint, className, labelClassName, children }: FormFieldProps) {
-    const hintId = hint ? `${id}-hint` : undefined;
+    // The hint is hidden while an error is shown, so only reference what's rendered
+    const hintId = hint && !error ? `${id}-hint` : undefined;
     const errorId = error ? `${id}-error` : undefined;
     const describedBy = [hintId, errorId].filter(Boolean).join(' ') || undefined;
 
