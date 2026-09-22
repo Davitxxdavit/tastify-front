@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-hot-toast';
 import { onSessionExpired, tokenStorage } from '../../lib/http/token-storage';
+import { disconnectAllSockets } from '../../lib/realtime/socket';
 import { authApi } from './api';
 import { AuthContext, type AuthContextValue } from './auth-context';
 import { authUserSchema, type AuthSession, type AuthUser } from './types';
@@ -44,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const logout = useCallback(() => {
         tokenStorage.clear();
+        disconnectAllSockets();
         setUser(null);
         queryClient.clear();
     }, [queryClient]);
@@ -52,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useEffect(
         () =>
             onSessionExpired(() => {
+                disconnectAllSockets();
                 setUser(null);
                 queryClient.clear();
                 toast.error('Your session expired. Please sign in again.', { id: 'session-expired' });

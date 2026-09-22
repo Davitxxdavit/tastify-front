@@ -83,7 +83,7 @@ export default function Checkout() {
             const order = await createOrder.mutateAsync(toOrderRequest(values, addressId, reconciled.available));
             clearCart();
             toast.success("Order placed! The kitchen has it.");
-            navigate(`/orders`, { replace: true, state: { placedOrderId: order.id } });
+            navigate(`/orders/${order.id}`, { replace: true });
         } catch (error) {
             applyApiErrors(error, form.setError, CHECKOUT_FIELD_MAP);
         } finally {

@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import type { Order } from '../features/orders/types';
 import { ORDER_STATUS_META } from '../features/orders/status';
 import { formatDateTime, formatGel } from '../lib/format';
@@ -20,7 +21,12 @@ export function OrderCard({ order }: OrderCardProps) {
             whileHover={{ y: -2 }}
             transition={{ duration: 0.2 }}
         >
-            <Card>
+            <Link
+                to={`/orders/${order.id}`}
+                aria-label={`Order #${order.id.slice(0, 8)}, ${status.label}, ${formatGel(order.totalPrice)}. View details`}
+                className="block rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-bright"
+            >
+            <Card className="transition-colors hover:border-primary/50">
                 <CardHeader>
                     <div className="flex items-start justify-between gap-4">
                         <div>
@@ -54,6 +60,7 @@ export function OrderCard({ order }: OrderCardProps) {
                     </div>
                 </CardContent>
             </Card>
+            </Link>
         </motion.div>
     );
 }

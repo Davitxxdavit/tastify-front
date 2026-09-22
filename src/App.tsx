@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import FAQ from './pages/FAQ';
 import Checkout from './pages/Checkout';
 import Orders from './pages/Orders';
+import OrderDetail from './pages/OrderDetail';
 import Profile from './pages/Profile';
 import { AuthProvider } from './features/auth/AuthProvider';
 import { RequireAuth } from './features/auth/RequireAuth';
@@ -30,6 +31,7 @@ function App() {
               <Route path="faq" element={<FAQ />} />
               <Route path="checkout" element={<RequireAuth><Checkout /></RequireAuth>} />
               <Route path="orders" element={<RequireAuth><Orders /></RequireAuth>} />
+              <Route path="orders/:orderId" element={<RequireAuth><OrderDetail /></RequireAuth>} />
               <Route path="profile" element={<RequireAuth><Profile /></RequireAuth>} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
