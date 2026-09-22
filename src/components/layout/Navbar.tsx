@@ -32,13 +32,13 @@ export function Navbar() {
                         <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48" }}>restaurant_menu</span>
                     </div>
                     <div>
-                        <h1 className="text-white text-xl font-serif-display font-bold tracking-tight">Kitchen Gallery</h1>
+                        <h1 className="text-white text-xl font-serif-display font-bold tracking-tight whitespace-nowrap">Kitchen Gallery</h1>
                         <p className="text-gray-400 text-[10px] uppercase tracking-widest font-medium">Batumi</p>
                     </div>
                 </Link>
 
                 {/* Desktop Nav */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden lg:flex items-center gap-8">
                     {navLinks.map((link, idx) => (
                         <Link
                             key={idx}
@@ -52,14 +52,14 @@ export function Navbar() {
 
                 <div className="flex items-center gap-4">
                     {/* Language Switcher - Visual Only for now */}
-                    <div className="hidden sm:flex items-center gap-2 text-xs font-semibold text-gray-500">
+                    <div className="hidden xl:flex items-center gap-2 text-xs font-semibold text-gray-500">
                         <button className="text-white hover:text-primary transition-colors">EN</button>
                         <span className="text-gray-700">|</span>
                         <button className="hover:text-primary transition-colors">GE</button>
                         <span className="text-gray-700">|</span>
                         <button className="hover:text-primary transition-colors">RU</button>
                     </div>
-                    <div className="h-4 w-px bg-accent-dark hidden sm:block"></div>
+                    <div className="h-4 w-px bg-accent-dark hidden xl:block"></div>
 
                     <button className="text-gray-300 hover:text-white transition-colors relative">
                         <span className="material-symbols-outlined">search</span>
@@ -78,7 +78,7 @@ export function Navbar() {
                     </button>
 
                     {isAuthenticated ? (
-                        <div className="hidden md:flex items-center gap-5">
+                        <div className="hidden lg:flex whitespace-nowrap items-center gap-5">
                             <Link to="/orders" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">My Orders</Link>
                             <Link to="/profile" className="text-gray-300 hover:text-white text-sm font-medium transition-colors">Profile</Link>
                             <button type="button" onClick={handleLogout} className="text-gray-400 hover:text-white text-sm font-medium transition-colors">
@@ -86,13 +86,13 @@ export function Navbar() {
                             </button>
                         </div>
                     ) : (
-                        <Link to="/login" className="hidden md:flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-white hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">
+                        <Link to="/login" className="hidden lg:flex h-10 items-center justify-center rounded-lg bg-primary px-5 text-sm font-bold text-white hover:bg-primary-hover transition-colors shadow-lg shadow-primary/20">
                             Login
                         </Link>
                     )}
 
                     <button
-                        className="md:hidden text-white"
+                        className="lg:hidden text-white"
                         onClick={() => setIsOpen(!isOpen)}
                     >
                         <span className="material-symbols-outlined">menu</span>
@@ -107,7 +107,7 @@ export function Navbar() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-background-dark border-t border-accent-dark"
+                        className="lg:hidden bg-background-dark border-t border-accent-dark"
                     >
                         <div className="px-6 py-4 flex flex-col gap-4">
                             {navLinks.map((link, idx) => (
