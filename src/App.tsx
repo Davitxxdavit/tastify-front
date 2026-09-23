@@ -15,7 +15,7 @@ import { AuthProvider } from './features/auth/AuthProvider';
 import { RequireAuth } from './features/auth/RequireAuth';
 import { CartProvider } from './features/cart/CartProvider';
 import { CartDrawer } from './components/CartDrawer';
-import { ChatWidget } from './components/ChatWidget';
+import { ChatWidget } from './features/chat/components/ChatWidget';
 
 function App() {
   return (
