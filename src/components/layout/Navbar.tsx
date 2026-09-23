@@ -25,14 +25,14 @@ export function Navbar() {
     ];
 
     return (
-        <nav className="sticky top-0 z-50 w-full backdrop-blur-md bg-background-dark/90 border-b border-accent-dark">
+        <nav aria-label="Main" className="sticky top-0 z-50 w-full backdrop-blur-md bg-background-dark/90 border-b border-accent-dark">
             <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
                 <Link to="/" className="flex items-center gap-3">
                     <div className="size-8 text-primary">
-                        <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48" }}>restaurant_menu</span>
+                        <span aria-hidden className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48" }}>restaurant_menu</span>
                     </div>
                     <div>
-                        <h1 className="text-white text-xl font-serif-display font-bold tracking-tight whitespace-nowrap">Kitchen Gallery</h1>
+                        <span className="block text-white text-xl font-serif-display font-bold tracking-tight whitespace-nowrap">Kitchen Gallery</span>
                         <p className="text-gray-400 text-[10px] uppercase tracking-widest font-medium">Batumi</p>
                     </div>
                 </Link>
@@ -52,26 +52,33 @@ export function Navbar() {
 
                 <div className="flex items-center gap-4">
                     {/* Language Switcher - Visual Only for now */}
-                    <div className="hidden xl:flex items-center gap-2 text-xs font-semibold text-gray-500">
-                        <button className="text-white hover:text-primary transition-colors">EN</button>
-                        <span className="text-gray-700">|</span>
-                        <button className="hover:text-primary transition-colors">GE</button>
-                        <span className="text-gray-700">|</span>
-                        <button className="hover:text-primary transition-colors">RU</button>
+                    <div className="hidden xl:flex items-center gap-2 text-xs font-semibold text-gray-500" role="group" aria-label="Language">
+                        <button type="button" aria-pressed="true" className="text-white hover:text-primary transition-colors">EN</button>
+                        <span className="text-gray-700" aria-hidden>|</span>
+                        <button type="button" disabled title="Georgian coming soon" className="cursor-not-allowed">GE</button>
+                        <span className="text-gray-700" aria-hidden>|</span>
+                        <button type="button" disabled title="Russian coming soon" className="cursor-not-allowed">RU</button>
                     </div>
                     <div className="h-4 w-px bg-accent-dark hidden xl:block"></div>
 
-                    <button className="text-gray-300 hover:text-white transition-colors relative">
-                        <span className="material-symbols-outlined">search</span>
-                    </button>
+                    <Link
+                        to="/menu"
+                        state={{ focusSearch: true }}
+                        aria-label="Search the menu"
+                        className="text-gray-300 hover:text-white transition-colors relative"
+                    >
+                        <span className="material-symbols-outlined" aria-hidden>search</span>
+                    </Link>
 
                     <button
+                        type="button"
                         className="text-gray-300 hover:text-white transition-colors relative"
                         onClick={openCart}
+                        aria-label={totalItems > 0 ? `Open cart, ${totalItems} ${totalItems === 1 ? 'item' : 'items'}` : 'Open cart'}
                     >
-                        <span className="material-symbols-outlined">shopping_bag</span>
+                        <span className="material-symbols-outlined" aria-hidden>shopping_bag</span>
                         {totalItems > 0 && (
-                            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
+                            <span aria-hidden className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white">
                                 {totalItems}
                             </span>
                         )}
@@ -92,10 +99,14 @@ export function Navbar() {
                     )}
 
                     <button
+                        type="button"
                         className="lg:hidden text-white"
                         onClick={() => setIsOpen(!isOpen)}
+                        aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                        aria-expanded={isOpen}
+                        aria-controls="mobile-navigation"
                     >
-                        <span className="material-symbols-outlined">menu</span>
+                        <span className="material-symbols-outlined" aria-hidden>{isOpen ? 'close' : 'menu'}</span>
                     </button>
                 </div>
             </div>
@@ -104,6 +115,7 @@ export function Navbar() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
+                        id="mobile-navigation"
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}

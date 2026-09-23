@@ -37,7 +37,7 @@ export default function FAQ() {
 
     return (
         <div className="flex flex-col min-h-screen bg-background-dark text-white font-display selection:bg-primary-bright selection:text-black">
-            <main className="flex-1">
+            <div className="flex-1">
                 <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
                     <div className="mb-10 text-center">
                         <h1 className="font-serif text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl mb-4">
@@ -54,19 +54,25 @@ export default function FAQ() {
                                 key={index}
                                 className={`group rounded-xl bg-surface-dark border border-border-green transition-all duration-300 ${openIndex === index ? 'bg-white/[0.02]' : ''}`}
                             >
-                                <button
-                                    className="flex w-full cursor-pointer list-none items-center justify-between p-6 focus:outline-none text-left"
-                                    onClick={() => toggle(index)}
-                                >
-                                    <h3 className="font-serif text-lg font-medium text-white group-hover:text-primary-bright transition-colors">
-                                        {faq.question}
-                                    </h3>
-                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-primary border border-white/10 text-white transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
-                                        <span className="material-symbols-outlined text-sm">expand_more</span>
-                                    </div>
-                                </button>
+                                <h3>
+                                    <button
+                                        type="button"
+                                        id={`faq-question-${index}`}
+                                        aria-expanded={openIndex === index}
+                                        aria-controls={`faq-answer-${index}`}
+                                        className="flex w-full cursor-pointer list-none items-center justify-between gap-4 p-6 text-left rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-bright"
+                                        onClick={() => toggle(index)}
+                                    >
+                                        <span className="font-serif text-lg font-medium text-white group-hover:text-primary-bright transition-colors">
+                                            {faq.question}
+                                        </span>
+                                        <span aria-hidden className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary border border-white/10 text-white transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
+                                            <span className="material-symbols-outlined text-sm">expand_more</span>
+                                        </span>
+                                    </button>
+                                </h3>
                                 {openIndex === index && (
-                                    <div className="px-6 pb-6 pt-0">
+                                    <div id={`faq-answer-${index}`} role="region" aria-labelledby={`faq-question-${index}`} className="px-6 pb-6 pt-0">
                                         <p className="text-base leading-relaxed text-primary-bright/80">
                                             {faq.answer}
                                         </p>
@@ -89,7 +95,7 @@ export default function FAQ() {
                         </button>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

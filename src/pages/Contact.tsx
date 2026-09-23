@@ -3,7 +3,7 @@ import { Button } from "../components/ui/Button";
 export default function Contact() {
     return (
         <div className="flex flex-col min-h-screen bg-background-dark text-white font-display">
-            <main className="flex-grow w-full flex flex-col items-center">
+            <div className="flex-grow w-full flex flex-col items-center">
                 <div className="w-full max-w-[1280px] px-4 sm:px-10 py-10 lg:py-16 flex flex-col gap-12">
                     {/* Header */}
                     <div className="flex flex-col gap-4 max-w-3xl">
@@ -193,7 +193,7 @@ export default function Contact() {
                         </div>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

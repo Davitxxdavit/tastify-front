@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
 import { Search, X } from "lucide-react";
@@ -28,6 +29,15 @@ export default function Menu() {
     const { data: categories, isPending, isError, error, refetch, isRefetching } = useMenuCategories();
     const { filters, setQuery, setCategory, clearFilters } = useMenuFilters();
     const [customizing, setCustomizing] = useState<MenuItem | null>(null);
+    const searchRef = useRef<HTMLInputElement>(null);
+    const location = useLocation();
+
+    // The navbar search icon links here with { focusSearch: true }
+    useEffect(() => {
+        if ((location.state as { focusSearch?: boolean } | null)?.focusSearch) {
+            searchRef.current?.focus();
+        }
+    }, [location.state]);
 
     const { query, category } = filters;
     const visibleCategories = useMemo(
@@ -93,6 +103,7 @@ export default function Menu() {
                         </label>
                         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" aria-hidden />
                         <input
+                            ref={searchRef}
                             id="menu-search"
                             type="search"
                             value={filters.query}
@@ -115,7 +126,7 @@ export default function Menu() {
             </div>
 
             {/* Main Content */}
-            <main className="flex-1 w-full bg-background-dark">
+            <div className="flex-1 w-full bg-background-dark">
                 <div className="layout-content-container max-w-[1280px] mx-auto px-4 md:px-10 lg:px-20 py-10 flex flex-col gap-16">
                     {isPending ? (
                         <MenuSkeleton />
@@ -169,7 +180,7 @@ export default function Menu() {
                     )}
                 </div>
                 <div className="h-24"></div>
-            </main>
+            </div>
 
             <AnimatePresence>
                 {customizing && <ItemOptionsDialog key={customizing.id} item={customizing} onClose={() => setCustomizing(null)} />}

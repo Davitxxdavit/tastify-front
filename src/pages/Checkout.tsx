@@ -95,7 +95,7 @@ export default function Checkout() {
 
     return (
         <div className="bg-background-dark text-white font-display antialiased min-h-screen flex flex-col selection:bg-primary selection:text-white">
-            <main className="flex-1 py-10 lg:py-14">
+            <div className="flex-1 py-10 lg:py-14">
                 <form onSubmit={form.handleSubmit(onSubmit)} noValidate className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
                         {/* Form Section */}
@@ -132,7 +132,7 @@ export default function Checkout() {
                         </div>
                     </div>
                 </form>
-            </main>
+            </div>
         </div>
     );
 }
