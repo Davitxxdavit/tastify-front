@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
@@ -33,11 +33,23 @@ export function Layout() {
             <OfflineBanner />
             <Navbar />
             <main id="main-content" ref={mainRef} tabIndex={-1} className="flex-1 outline-none">
-                <Outlet />
+                {/* Pages are lazy-loaded; keep the navbar in place while a chunk loads */}
+                <Suspense fallback={<PageFallback />}>
+                    <Outlet />
+                </Suspense>
             </main>
             <Footer />
             {/* Top-center keeps toasts clear of the floating cart and chat buttons */}
             <Toaster position="top-center" toastOptions={{ style: { background: '#0a0a0a', color: '#fff', border: '1px solid #1a1a1a' } }} />
+        </div>
+    );
+}
+
+function PageFallback() {
+    return (
+        <div className="flex min-h-[60vh] items-center justify-center" role="status">
+            <span className="h-8 w-8 animate-spin rounded-full border-2 border-primary-bright border-t-transparent" aria-hidden />
+            <span className="sr-only">Loading page…</span>
         </div>
     );
 }

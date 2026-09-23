@@ -1,21 +1,25 @@
+import { lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Layout } from './components/layout/Layout';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Menu from './pages/Menu';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import FAQ from './pages/FAQ';
-import Checkout from './pages/Checkout';
-import Orders from './pages/Orders';
-import OrderDetail from './pages/OrderDetail';
-import Profile from './pages/Profile';
 import { AuthProvider } from './features/auth/AuthProvider';
 import { RequireAuth } from './features/auth/RequireAuth';
 import { CartProvider } from './features/cart/CartProvider';
 import { CartDrawer } from './components/CartDrawer';
 import { ChatWidget } from './features/chat/components/ChatWidget';
+
+// Route-level code splitting: each page is its own chunk
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Menu = lazy(() => import('./pages/Menu'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const FAQ = lazy(() => import('./pages/FAQ'));
+const Checkout = lazy(() => import('./pages/Checkout'));
+const Orders = lazy(() => import('./pages/Orders'));
+const OrderDetail = lazy(() => import('./pages/OrderDetail'));
+const Profile = lazy(() => import('./pages/Profile'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 function App() {
   return (
@@ -35,8 +39,7 @@ function App() {
               <Route path="profile" element={<RequireAuth><Profile /></RequireAuth>} />
               <Route path="login" element={<Login />} />
               <Route path="register" element={<Register />} />
-              {/* 404 Route */}
-              <Route path="*" element={<div className="p-10 text-center">404 - Page Not Found</div>} />
+              <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
           <CartDrawer />
