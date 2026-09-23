@@ -4,6 +4,10 @@
 
 React web client for **Tastify**, a restaurant ordering app. Customers browse the menu, build a cart with extras, check out, then follow their order live and chat with the kitchen. It runs against the NestJS **[Tastify API (testify-back)](https://github.com/Davitxxdavit/testify-back)** over REST and Socket.IO.
 
+![Demo: choose a dish with extras, check out, then watch the kitchen's chat reply and the status timeline update live](docs/demo.png)
+
+*Recorded against the local backend: the kitchen's replies and status changes arrive over Socket.IO, with no page reloads.*
+
 | Order tracking with live chat | Checkout |
 | --- | --- |
 | ![Order tracking with live status timeline and chat](docs/screenshots/desktop-order-tracking.png) | ![Checkout form with saved addresses](docs/screenshots/desktop-checkout.png) |
