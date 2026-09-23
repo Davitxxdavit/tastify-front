@@ -8,6 +8,8 @@ React web client for **Tastify**, a restaurant ordering app. Customers browse th
 | --- | --- |
 | ![Order tracking with live status timeline and chat](docs/screenshots/desktop-order-tracking.png) | ![Checkout form with saved addresses](docs/screenshots/desktop-checkout.png) |
 
+![Home page with Georgian typography](docs/screenshots/desktop-home.png)
+
 | Menu | Mobile: menu | Mobile: tracking | Mobile: chat |
 | --- | --- | --- | --- |
 | ![Menu with category filter and search](docs/screenshots/desktop-menu.png) | ![Mobile menu](docs/screenshots/mobile-menu.png) | ![Mobile order tracking](docs/screenshots/mobile-order-tracking.png) | ![Mobile chat](docs/screenshots/mobile-chat.png) |
