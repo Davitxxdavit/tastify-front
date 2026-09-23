@@ -3,7 +3,7 @@ import { Button } from "../components/ui/Button";
 export default function Contact() {
     return (
         <div className="flex flex-col min-h-screen bg-background-dark text-white font-display">
-            <main className="flex-grow w-full flex flex-col items-center">
+            <div className="flex-grow w-full flex flex-col items-center">
                 <div className="w-full max-w-[1280px] px-4 sm:px-10 py-10 lg:py-16 flex flex-col gap-12">
                     {/* Header */}
                     <div className="flex flex-col gap-4 max-w-3xl">
@@ -92,7 +92,7 @@ export default function Contact() {
                             </div>
                             <div className="relative w-full h-48 rounded-xl overflow-hidden border border-surface-border group cursor-pointer">
                                 <img
-                                    alt="Map location of Kitchen Gallery"
+                                    alt="Map location of Tastify in Batumi"
                                     className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-500 scale-100 group-hover:scale-105"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDUh6RTMDZ7KO4AHrop9wr-fw1HMpO471GI5aNDVDPqkWdEywAECyZvPSJjPD95dU5EKv3NC579BKaKjgSoKCHi-SsGyW2FWa7JH94jn7LCA-Ff6H_gbe96XVxF16HRgcbtLGVdw-k5DB2E6idy2wC32swT_Buq5Vx85PZqiJ76dZhCP34BR0mXI2AQSJmk_FWdi99uVv_thmO0_YnuVaFOc2Fl9JuKCErtTHioupLMN5rK9jPltVPS8Wao6kec5Qk8hhWtROK9_YI"
                                 />
@@ -193,7 +193,7 @@ export default function Contact() {
                         </div>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

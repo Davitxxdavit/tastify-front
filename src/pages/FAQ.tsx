@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -23,11 +24,11 @@ export default function FAQ() {
         },
         {
             question: "Can I customize the spice level of my Khinkali?",
-            answer: "Yes, customization is a key part of the Kitchen Gallery experience. When ordering Khinkali, you can select from Mild, Traditional (Medium), or \"Highland\" (Spicy). Just specify your preference in the order notes."
+            answer: "Yes, customization is a key part of the Tastify experience. When ordering Khinkali, you can select from Mild, Traditional (Medium), or \"Highland\" (Spicy). Just specify your preference in the order notes."
         },
         {
             question: "Can I pay with card upon delivery?",
-            answer: "Our couriers carry portable terminals that accept all major credit cards, including Visa, Mastercard, and Amex. You can also pay securely online via Apple Pay or Google Pay during checkout."
+            answer: "Right now we accept cash on delivery: you pay the courier when your order arrives. Card payments are coming soon."
         },
         {
             question: "Are your ingredients locally sourced?",
@@ -37,7 +38,7 @@ export default function FAQ() {
 
     return (
         <div className="flex flex-col min-h-screen bg-background-dark text-white font-display selection:bg-primary-bright selection:text-black">
-            <main className="flex-1">
+            <div className="flex-1">
                 <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
                     <div className="mb-10 text-center">
                         <h1 className="font-serif text-4xl font-bold leading-tight tracking-tight text-white sm:text-5xl mb-4">
@@ -54,19 +55,25 @@ export default function FAQ() {
                                 key={index}
                                 className={`group rounded-xl bg-surface-dark border border-border-green transition-all duration-300 ${openIndex === index ? 'bg-white/[0.02]' : ''}`}
                             >
-                                <button
-                                    className="flex w-full cursor-pointer list-none items-center justify-between p-6 focus:outline-none text-left"
-                                    onClick={() => toggle(index)}
-                                >
-                                    <h3 className="font-serif text-lg font-medium text-white group-hover:text-primary-bright transition-colors">
-                                        {faq.question}
-                                    </h3>
-                                    <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-primary border border-white/10 text-white transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
-                                        <span className="material-symbols-outlined text-sm">expand_more</span>
-                                    </div>
-                                </button>
+                                <h3>
+                                    <button
+                                        type="button"
+                                        id={`faq-question-${index}`}
+                                        aria-expanded={openIndex === index}
+                                        aria-controls={`faq-answer-${index}`}
+                                        className="flex w-full cursor-pointer list-none items-center justify-between gap-4 p-6 text-left rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-bright"
+                                        onClick={() => toggle(index)}
+                                    >
+                                        <span className="font-serif text-lg font-medium text-white group-hover:text-primary-bright transition-colors">
+                                            {faq.question}
+                                        </span>
+                                        <span aria-hidden className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary border border-white/10 text-white transition-transform duration-300 ${openIndex === index ? 'rotate-180' : ''}`}>
+                                            <span className="material-symbols-outlined text-sm">expand_more</span>
+                                        </span>
+                                    </button>
+                                </h3>
                                 {openIndex === index && (
-                                    <div className="px-6 pb-6 pt-0">
+                                    <div id={`faq-answer-${index}`} role="region" aria-labelledby={`faq-question-${index}`} className="px-6 pb-6 pt-0">
                                         <p className="text-base leading-relaxed text-primary-bright/80">
                                             {faq.answer}
                                         </p>
@@ -84,12 +91,12 @@ export default function FAQ() {
                         <p className="mx-auto max-w-lg text-primary-bright/80 mb-8">
                             Our concierge team is here to assist you with specific dietary requirements, corporate catering, or special event orders.
                         </p>
-                        <button className="inline-flex h-12 min-w-[160px] cursor-pointer items-center justify-center rounded-lg bg-primary-bright px-6 text-base font-bold text-background-dark shadow-lg shadow-primary-bright/20 transition-all hover:scale-105 hover:bg-white hover:shadow-primary-bright/40">
+                        <Link to="/contact" className="inline-flex h-12 min-w-[160px] cursor-pointer items-center justify-center rounded-lg bg-primary-bright px-6 text-base font-bold text-background-dark shadow-lg shadow-primary-bright/20 transition-all hover:scale-105 hover:bg-white hover:shadow-primary-bright/40">
                             Contact Support
-                        </button>
+                        </Link>
                     </div>
                 </div>
-            </main>
+            </div>
         </div>
     );
 }

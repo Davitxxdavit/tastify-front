@@ -1,38 +1,63 @@
-import { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/Card';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import { motion } from 'framer-motion';
+import { useAuth } from '../features/auth/useAuth';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { FormField } from '../components/ui/FormField';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/Card';
+import { applyApiErrors } from '../lib/forms';
+import { toApiError } from '../lib/http/api-error';
+import { georgianMobileSchema } from '../lib/phone';
+import { safeRedirect } from '../lib/redirect';
+
+const registerSchema = z
+    .object({
+        name: z.string().trim().min(2, 'Enter your name'),
+        email: z.string().trim().min(1, 'Enter your email').email('Enter a valid email'),
+        phone: z.union([z.literal(''), georgianMobileSchema]),
+        password: z.string().min(6, 'Password must be at least 6 characters'),
+        confirmPassword: z.string(),
+    })
+    .refine((values) => values.password === values.confirmPassword, {
+        path: ['confirmPassword'],
+        message: 'Passwords do not match',
+    });
+type RegisterInput = z.input<typeof registerSchema>;
+type RegisterValues = z.output<typeof registerSchema>;
 
 export default function Register() {
-    const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-    });
-    const { register } = useAuth();
+    const { register: registerAccount } = useAuth();
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [searchParams] = useSearchParams();
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors, isSubmitting },
+    } = useForm<RegisterInput, unknown, RegisterValues>({
+        resolver: zodResolver(registerSchema),
+        defaultValues: { name: '', email: '', phone: '', password: '', confirmPassword: '' },
+    });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
+    const onSubmit = async ({ name, email, phone, password }: RegisterValues) => {
         try {
-            await register(formData);
-            toast.success('Registration successful! Please sign in.');
-            navigate('/login');
+            const user = await registerAccount({ name, email, password, ...(phone && { phone }) });
+            toast.success(`Welcome to Tastify, ${user.name}!`);
+            navigate(safeRedirect(searchParams.get('redirect')), { replace: true });
         } catch (error) {
-            toast.error('Registration failed. Please try again.');
-        } finally {
-            setLoading(false);
+            const apiError = toApiError(error);
+            // Duplicate accounts come back as 409 with a plain message
+            if (apiError.status === 409 && /email/i.test(apiError.message)) {
+                setError('email', { type: 'server', message: 'An account with this email already exists' }, { shouldFocus: true });
+            } else if (apiError.status === 409 && /phone/i.test(apiError.message)) {
+                setError('phone', { type: 'server', message: 'An account with this phone number already exists' }, { shouldFocus: true });
+            } else {
+                applyApiErrors(error, setError, { name: 'name', email: 'email', phone: 'phone', password: 'password' });
+            }
         }
     };
 
@@ -47,36 +72,38 @@ export default function Register() {
                 <Card>
                     <CardHeader>
                         <CardTitle>Create Account</CardTitle>
-                        <CardDescription>Join Kitchen Gallery to order delicious burgers.</CardDescription>
+                        <CardDescription>Join Tastify to order Georgian food in Batumi.</CardDescription>
                     </CardHeader>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit(onSubmit)} noValidate>
                         <CardContent className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="space-y-2">
-                                    <label htmlFor="firstName" className="text-sm font-medium leading-none">First Name</label>
-                                    <Input id="firstName" value={formData.firstName} onChange={handleChange} required />
-                                </div>
-                                <div className="space-y-2">
-                                    <label htmlFor="lastName" className="text-sm font-medium leading-none">Last Name</label>
-                                    <Input id="lastName" value={formData.lastName} onChange={handleChange} required />
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <label htmlFor="email" className="text-sm font-medium leading-none">Email</label>
-                                <Input id="email" type="email" value={formData.email} onChange={handleChange} required />
-                            </div>
-                            <div className="space-y-2">
-                                <label htmlFor="password" className="text-sm font-medium leading-none">Password</label>
-                                <Input id="password" type="password" value={formData.password} onChange={handleChange} required />
-                            </div>
+                            {errors.root?.server && (
+                                <p role="alert" className="rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                                    {errors.root.server.message}
+                                </p>
+                            )}
+                            <FormField id="name" label="Full name" error={errors.name?.message}>
+                                {(control) => <Input {...control} autoComplete="name" {...register('name')} />}
+                            </FormField>
+                            <FormField id="email" label="Email" error={errors.email?.message}>
+                                {(control) => <Input {...control} type="email" autoComplete="email" {...register('email')} />}
+                            </FormField>
+                            <FormField id="phone" label="Mobile number (optional)" hint="Georgian mobile, e.g. 555 12 34 56" error={errors.phone?.message}>
+                                {(control) => <Input {...control} type="tel" autoComplete="tel" inputMode="tel" {...register('phone')} />}
+                            </FormField>
+                            <FormField id="password" label="Password" error={errors.password?.message}>
+                                {(control) => <Input {...control} type="password" autoComplete="new-password" {...register('password')} />}
+                            </FormField>
+                            <FormField id="confirmPassword" label="Confirm password" error={errors.confirmPassword?.message}>
+                                {(control) => <Input {...control} type="password" autoComplete="new-password" {...register('confirmPassword')} />}
+                            </FormField>
                         </CardContent>
                         <CardFooter className="flex flex-col space-y-4">
-                            <Button type="submit" className="w-full" disabled={loading}>
-                                {loading ? 'Creating account...' : 'Create Account'}
+                            <Button type="submit" className="w-full" disabled={isSubmitting}>
+                                {isSubmitting ? 'Creating account...' : 'Create Account'}
                             </Button>
                             <div className="text-center text-sm text-muted-foreground">
                                 Already have an account?{' '}
-                                <Link to="/login" className="text-primary hover:underline">
+                                <Link to={`/login${searchParams.size ? `?${searchParams}` : ''}`} className="text-primary hover:underline">
                                     Sign in
                                 </Link>
                             </div>

@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Kitchen Gallery Theme Mapping */
+    /* Tastify theme mapping */
     --background: 0 0% 98%; /* background-light #f6f8f7 */
     --foreground: 0 0% 8%;
     
@@ -78,6 +78,13 @@
 }
 
 @layer utilities {
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .animate-fade-in-up {
     animation: fadeInUp 0.5s ease-out forwards;
   }
