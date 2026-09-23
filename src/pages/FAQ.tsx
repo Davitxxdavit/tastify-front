@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
@@ -23,11 +24,11 @@ export default function FAQ() {
         },
         {
             question: "Can I customize the spice level of my Khinkali?",
-            answer: "Yes, customization is a key part of the Kitchen Gallery experience. When ordering Khinkali, you can select from Mild, Traditional (Medium), or \"Highland\" (Spicy). Just specify your preference in the order notes."
+            answer: "Yes, customization is a key part of the Tastify experience. When ordering Khinkali, you can select from Mild, Traditional (Medium), or \"Highland\" (Spicy). Just specify your preference in the order notes."
         },
         {
             question: "Can I pay with card upon delivery?",
-            answer: "Our couriers carry portable terminals that accept all major credit cards, including Visa, Mastercard, and Amex. You can also pay securely online via Apple Pay or Google Pay during checkout."
+            answer: "Right now we accept cash on delivery: you pay the courier when your order arrives. Card payments are coming soon."
         },
         {
             question: "Are your ingredients locally sourced?",
@@ -90,9 +91,9 @@ export default function FAQ() {
                         <p className="mx-auto max-w-lg text-primary-bright/80 mb-8">
                             Our concierge team is here to assist you with specific dietary requirements, corporate catering, or special event orders.
                         </p>
-                        <button className="inline-flex h-12 min-w-[160px] cursor-pointer items-center justify-center rounded-lg bg-primary-bright px-6 text-base font-bold text-background-dark shadow-lg shadow-primary-bright/20 transition-all hover:scale-105 hover:bg-white hover:shadow-primary-bright/40">
+                        <Link to="/contact" className="inline-flex h-12 min-w-[160px] cursor-pointer items-center justify-center rounded-lg bg-primary-bright px-6 text-base font-bold text-background-dark shadow-lg shadow-primary-bright/20 transition-all hover:scale-105 hover:bg-white hover:shadow-primary-bright/40">
                             Contact Support
-                        </button>
+                        </Link>
                     </div>
                 </div>
             </div>

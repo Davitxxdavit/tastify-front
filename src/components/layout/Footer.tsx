@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+const COPYRIGHT_YEAR = new Date().getFullYear();
+
 export function Footer() {
     return (
         <footer className="bg-background-dark border-t border-surface-border pt-20 pb-10">
@@ -8,7 +10,7 @@ export function Footer() {
                     <div className="space-y-6">
                         <div className="flex items-center gap-2">
                             <span className="material-symbols-outlined text-3xl text-primary">restaurant_menu</span>
-                            <h2 className="text-white text-xl font-serif-display font-bold">Kitchen Gallery</h2>
+                            <h2 className="text-white text-xl font-serif-display font-bold">Tastify</h2>
                         </div>
                         <p className="text-gray-500 text-sm leading-relaxed">
                             Bringing the soul of Georgia to your table. Premium ingredients, traditional recipes, and modern service in the heart of Batumi.
@@ -56,7 +58,7 @@ export function Footer() {
                     </div>
                 </div>
                 <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-gray-600 text-sm">© 2024 Kitchen Gallery Batumi. All rights reserved.</p>
+                    <p className="text-gray-600 text-sm">© {COPYRIGHT_YEAR} Tastify, Batumi. All rights reserved.</p>
                     <div className="flex gap-6">
                         <span className="text-gray-600 text-xs">English</span>
                         <span className="text-gray-600 text-xs">ქართული</span>

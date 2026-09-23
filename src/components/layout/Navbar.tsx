@@ -16,7 +16,7 @@ export function Navbar() {
         navigate('/');
     };
 
-    // Kitchen Gallery Nav Items
+    // Main navigation
     const navLinks = [
         { path: '/menu', label: 'Menu' },
         { path: '/about', label: 'About Us' },
@@ -32,7 +32,7 @@ export function Navbar() {
                         <span aria-hidden className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48" }}>restaurant_menu</span>
                     </div>
                     <div>
-                        <span className="block text-white text-xl font-serif-display font-bold tracking-tight whitespace-nowrap">Kitchen Gallery</span>
+                        <span className="block text-white text-xl font-serif-display font-bold tracking-tight whitespace-nowrap">Tastify</span>
                         <p className="text-gray-400 text-[10px] uppercase tracking-widest font-medium">Batumi</p>
                     </div>
                 </Link>

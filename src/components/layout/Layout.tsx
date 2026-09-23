@@ -1,14 +1,34 @@
 import { Suspense, useEffect, useRef } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { matchPath, Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Footer } from './Footer';
 import { Toaster } from 'react-hot-toast';
 import { OfflineBanner } from '../OfflineBanner';
 
+// Document titles (announced by screen readers on navigation)
+const PAGE_TITLES: [pattern: string, title: string][] = [
+    ['/', 'Georgian food delivery in Batumi'],
+    ['/menu', 'Menu'],
+    ['/about', 'About us'],
+    ['/contact', 'Contact'],
+    ['/faq', 'Delivery & FAQ'],
+    ['/checkout', 'Checkout'],
+    ['/orders/:orderId', 'Order tracking'],
+    ['/orders', 'My orders'],
+    ['/profile', 'Profile'],
+    ['/login', 'Sign in'],
+    ['/register', 'Create account'],
+];
+
 export function Layout() {
     const { pathname, state } = useLocation();
     const mainRef = useRef<HTMLElement>(null);
     const isFirstRender = useRef(true);
+
+    useEffect(() => {
+        const title = PAGE_TITLES.find(([pattern]) => matchPath(pattern, pathname))?.[1] ?? 'Page not found';
+        document.title = `${title} · Tastify`;
+    }, [pathname]);
 
     // On client-side navigation, start at the top and move focus to the new
     // page content so keyboard and screen reader users aren't left on the old link.
